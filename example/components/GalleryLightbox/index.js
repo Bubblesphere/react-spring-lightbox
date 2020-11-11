@@ -98,18 +98,9 @@ class BlogImageGallery extends React.Component {
 
         return (
             <GalleryContainer>
-                {clientSide && (
-                    <Gallery
-                        columns={this.columnConfig}
-                        onClick={this.openLightbox}
-                        photos={images}
-                        margin={6}
-                        direction={imageMasonryDirection}
-                        renderImage={GridImage}
-                    />
-                )}
+                
                 <StyledLightbox
-                    isOpen={lightboxIsOpen}
+                    isOpen={true}
                     onClose={this.closeLightbox}
                     onPrev={this.gotoPrevious}
                     onNext={this.gotoNext}

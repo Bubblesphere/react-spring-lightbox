@@ -9,7 +9,7 @@ export default () => (
             images={[
                 {
                     src:
-                        'https://timellenberger.com/static/blog-content/dark-mode/win10-dark-mode.jpg',
+                        'https://m.media-amazon.com/images/G/01/digital/music/merch/2019/LandingPages/katana/subtest/Katana_Aquisition_Desktop_1_1x.jpg',
                     caption: 'Windows 10 Dark Mode Setting',
                     alt: 'Windows 10 Dark Mode Setting',
                     width: 2848,
