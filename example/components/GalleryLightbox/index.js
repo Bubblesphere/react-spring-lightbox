@@ -107,6 +107,8 @@ class BlogImageGallery extends React.Component {
                     images={images}
                     currentIndex={currentImageIndex}
                     galleryTitle={galleryTitle}
+                    lazyLoad={true}
+                    lazyLoadSrc="https://www.pinclipart.com/picdir/big/167-1677865_facebook-button-image-facebook-small-icon-png-clipart.png"
                     singleClickToZoom
                     renderHeader={() => (
                         <LightboxHeader

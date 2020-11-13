@@ -39,7 +39,9 @@ const Lightbox = ({
     className,
     singleClickToZoom,
     style,
-    pageTransitionConfig
+    pageTransitionConfig,
+    lazyLoad,
+    lazyLoadSrc
 }) => {
     // Handle event listeners for keyboard
     useEffect(() => {
@@ -110,6 +112,8 @@ const Lightbox = ({
                     renderNextButton={renderNextButton}
                     renderImageOverlay={renderImageOverlay}
                     singleClickToZoom={singleClickToZoom}
+                    lazyLoad={lazyLoad}
+                    lazyLoadSrc={lazyLoadSrc}
                 />
                 {renderFooter()}
             </PageContainer>
@@ -140,7 +144,9 @@ Lightbox.propTypes = {
     style: PropTypes.object,
     pageTransitionConfig: PropTypes.object,
     renderImageOverlay: PropTypes.func,
-    singleClickToZoom: PropTypes.bool
+    singleClickToZoom: PropTypes.bool,
+    lazyLoad: PropTypes.bool,
+    lazyLoadSrc: PropTypes.string
 };
 
 Lightbox.defaultProps = {
@@ -152,7 +158,9 @@ Lightbox.defaultProps = {
     renderPrevButton: () => null,
     renderNextButton: () => null,
     renderImageOverlay: () => null,
-    singleClickToZoom: false
+    singleClickToZoom: false,
+    lazyLoad: false,
+    lazyLoadSrc: ''
 };
 
 export default Lightbox;

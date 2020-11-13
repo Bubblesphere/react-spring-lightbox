@@ -8,6 +8,7 @@ import {
     imageIsOutOfBounds,
     getTranslateOffsetsFromScale
 } from '../../utils';
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 /**
  * Animates pinch-zoom + panning on image using spring physics
@@ -30,9 +31,14 @@ const Image = ({
     isCurrentImage,
     setDisableDrag,
     singleClickToZoom,
-    pagerIsDragging
+    pagerIsDragging,
+    lazyLoad,
+    lazyLoadSrc
 }) => {
+    const [isImageLoaded, setImageLoaded] = React.useState(false);
+    const [hasError, setHasError] = React.useState(false);
     const [isPanningImage, setIsPanningImage] = useState(false);
+    const [lazyLoadInitiated, setLazyLoadInitiated] = useState(false);
     const imageRef = useRef();
     const defaultImageTransform = () => ({
         scale: 1,
@@ -60,6 +66,8 @@ const Image = ({
             if (f.scale === 1) setDisableDrag(false);
         }
     }));
+
+
 
     // Reset scale of this image when dragging to new image in ImagePager
     useEffect(() => {
@@ -229,7 +237,47 @@ const Image = ({
         latency: singleClickToZoom ? 0 : 200
     });
 
+    useEffect(() => {
+        if (!lazyLoadInitiated) {
+            if (isCurrentImage) {
+                const img = document.createElement('img');
+        
+                img.onload = () => setImageLoaded(true);
+                img.onerror = () => setHasError(true);
+                
+                img.src = src;
+
+                setLazyLoadInitiated(true);
+            }
+        }
+    }, [isCurrentImage]);
+    console.log("te");
+    console.log(lazyLoadSrc);
     return (
+        !lazyLoad || isImageLoaded  ? 
+        <AnimatedImage ref={imageRef}
+            className="lightbox-image"
+            style={{
+                transform: to(
+                    [scale, translateX, translateY],
+                    (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`
+                ),
+                maxHeight: pagerHeight,
+                ...(isCurrentImage && { willChange: 'transform' })
+            }}
+            src={src}
+            alt={alt}
+            draggable="false"
+            onDragStart={e => {
+                // Disable image ghost dragging in firefox
+                e.preventDefault();
+            }}
+            onClick={e => {
+                // Don't close lighbox when clicking image
+                e.stopPropagation();
+                e.nativeEvent.stopImmediatePropagation();
+            }}
+        /> :
         <AnimatedImage
             ref={imageRef}
             className="lightbox-image"
@@ -241,7 +289,7 @@ const Image = ({
                 maxHeight: pagerHeight,
                 ...(isCurrentImage && { willChange: 'transform' })
             }}
-            src={src}
+            src={lazyLoadSrc}
             alt={alt}
             draggable="false"
             onDragStart={e => {
@@ -271,7 +319,10 @@ Image.propTypes = {
     /* Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: PropTypes.bool.isRequired,
     /* Indicates parent ImagePager is in a state of dragging, if true click to zoom is disabled */
-    pagerIsDragging: PropTypes.bool.isRequired
+    pagerIsDragging: PropTypes.bool.isRequired,
+    /* Whether the image should be loaded only when shown */
+    lazyLoad: PropTypes.bool.isRequired,
+    lazyLoadSrc: PropTypes.string.isRequired
 };
 
 export default Image;

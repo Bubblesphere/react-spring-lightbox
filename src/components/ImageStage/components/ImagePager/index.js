@@ -28,7 +28,9 @@ const ImagePager = ({
     onNext,
     onClose,
     renderImageOverlay,
-    singleClickToZoom
+    singleClickToZoom,
+    lazyLoad,
+    lazyLoadSrc
 }) => {
     const firstRender = useRef(true);
     const imageStageRef = useRef(
@@ -189,6 +191,8 @@ const ImagePager = ({
                             isCurrentImage={i === currentIndex}
                             pagerIsDragging={isDragging}
                             singleClickToZoom={singleClickToZoom}
+                            lazyLoad={lazyLoad}
+                            lazyLoadSrc={lazyLoadSrc}
                         />
                         {renderImageOverlay()}
                     </ImageContainer>
@@ -221,7 +225,10 @@ ImagePager.propTypes = {
     /* Fixed height of the image stage, used to restrict maximum height of images */
     pagerHeight: PropTypes.number.isRequired,
     /* Overrides the default behavior of double clicking causing an image zoom to a single click */
-    singleClickToZoom: PropTypes.isRequired
+    singleClickToZoom: PropTypes.isRequired,
+    /* Whether the image should be loaded only when shown */
+    lazyLoad: PropTypes.bool.isRequired,
+    lazyLoadSrc: PropTypes.string.isRequired
 };
 
 export default ImagePager;

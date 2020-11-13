@@ -25,12 +25,15 @@ const ImageStage = ({
     renderPrevButton,
     renderNextButton,
     renderImageOverlay,
-    singleClickToZoom
+    singleClickToZoom,
+    lazyLoad,
+    lazyLoadSrc
 }) => {
     // Extra sanity check that the next/prev image exists before moving to it
     const canPrev = currentIndex > 0;
     const canNext = currentIndex + 1 < images.length;
 
+    console.log(lazyLoadSrc);
     return (
         <ImageStageContainer className="lightbox-image-stage">
             {renderPrevButton({ canPrev })}
@@ -42,12 +45,13 @@ const ImageStage = ({
                 onPrev={onPrev}
                 renderImageOverlay={renderImageOverlay}
                 singleClickToZoom={singleClickToZoom}
+                lazyLoad={lazyLoad}
+                lazyLoadSrc={lazyLoadSrc}
             />
             {renderNextButton({ canNext })}
         </ImageStageContainer>
     );
 };
-
 ImageStage.propTypes = {
     onClose: PropTypes.func.isRequired,
     onPrev: PropTypes.func.isRequired,
@@ -65,7 +69,9 @@ ImageStage.propTypes = {
     renderPrevButton: PropTypes.func.isRequired,
     renderNextButton: PropTypes.func.isRequired,
     renderImageOverlay: PropTypes.func.isRequired,
-    singleClickToZoom: PropTypes.isRequired
+    singleClickToZoom: PropTypes.isRequired,
+    lazyLoad: PropTypes.bool.isRequired,
+    lazyLoadSrc: PropTypes.string.isRequired
 };
 
 export default ImageStage;
