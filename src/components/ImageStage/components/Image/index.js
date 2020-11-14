@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { useSpring, animated, to, config } from '@react-spring/web';
 import { useGesture } from 'react-use-gesture';
@@ -40,6 +40,9 @@ const Image = ({
     const [isPanningImage, setIsPanningImage] = useState(false);
     const [lazyLoadInitiated, setLazyLoadInitiated] = useState(false);
     const imageRef = useRef();
+
+    const shouldLoad = !(lazyLoad && !isCurrentImage);
+
     const defaultImageTransform = () => ({
         scale: 1,
         translateX: 0,
@@ -240,6 +243,7 @@ const Image = ({
     useEffect(() => {
         if (!lazyLoadInitiated) {
             if (isCurrentImage) {
+                
                 const img = document.createElement('img');
         
                 img.onload = () => setImageLoaded(true);
@@ -251,57 +255,37 @@ const Image = ({
             }
         }
     }, [isCurrentImage]);
-    console.log("te");
-    console.log(lazyLoadSrc);
+
+
     return (
-        !lazyLoad || isImageLoaded  ? 
-        <AnimatedImage ref={imageRef}
-            className="lightbox-image"
-            style={{
-                transform: to(
-                    [scale, translateX, translateY],
-                    (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`
-                ),
-                maxHeight: pagerHeight,
-                ...(isCurrentImage && { willChange: 'transform' })
-            }}
-            src={src}
-            alt={alt}
-            draggable="false"
-            onDragStart={e => {
-                // Disable image ghost dragging in firefox
-                e.preventDefault();
-            }}
-            onClick={e => {
-                // Don't close lighbox when clicking image
-                e.stopPropagation();
-                e.nativeEvent.stopImmediatePropagation();
-            }}
-        /> :
-        <AnimatedImage
-            ref={imageRef}
-            className="lightbox-image"
-            style={{
-                transform: to(
-                    [scale, translateX, translateY],
-                    (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`
-                ),
-                maxHeight: pagerHeight,
-                ...(isCurrentImage && { willChange: 'transform' })
-            }}
-            src={lazyLoadSrc}
-            alt={alt}
-            draggable="false"
-            onDragStart={e => {
-                // Disable image ghost dragging in firefox
-                e.preventDefault();
-            }}
-            onClick={e => {
-                // Don't close lighbox when clicking image
-                e.stopPropagation();
-                e.nativeEvent.stopImmediatePropagation();
-            }}
-        />
+        <>
+            <AnimatedImage
+                ref={imageRef}
+                className="lightbox-image"
+                style={{
+                    transform: to(
+                        [scale, translateX, translateY],
+                        (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`
+                    ),
+                    maxHeight: pagerHeight,
+                    ...(isCurrentImage && { willChange: 'transform' })
+                }}
+                src={!lazyLoad || isImageLoaded  ? src : lazyLoadSrc}
+                alt={alt}
+                draggable="false"
+                onDragStart={e => {
+                    // Disable image ghost dragging in firefox
+                    e.preventDefault();
+                }}
+                onClick={e => {
+                    // Don't close lighbox when clicking image
+                    e.stopPropagation();
+                    e.nativeEvent.stopImmediatePropagation();
+                }}
+            />
+            {lazyLoad && !isImageLoaded && isCurrentImage && <p>Loading</p>}
+        </>
+        
     );
 };
 

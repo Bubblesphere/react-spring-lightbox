@@ -29,8 +29,7 @@ const ImagePager = ({
     onClose,
     renderImageOverlay,
     singleClickToZoom,
-    lazyLoad,
-    lazyLoadSrc
+    lazyLoad
 }) => {
     const firstRender = useRef(true);
     const imageStageRef = useRef(
@@ -183,17 +182,19 @@ const ImagePager = ({
                             e.nativeEvent.stopImmediatePropagation();
                         }}
                     >
-                        <Image
-                            setDisableDrag={setDisableDrag}
-                            src={images[i].src}
-                            alt={images[i].alt}
-                            pagerHeight={pagerHeight}
-                            isCurrentImage={i === currentIndex}
-                            pagerIsDragging={isDragging}
-                            singleClickToZoom={singleClickToZoom}
-                            lazyLoad={lazyLoad}
-                            lazyLoadSrc={lazyLoadSrc}
-                        />
+                        {!(lazyLoad && !i === currentIndex) && 
+                            <Image
+                                setDisableDrag={setDisableDrag}
+                                src={images[i].src}
+                                alt={images[i].alt}
+                                pagerHeight={pagerHeight}
+                                isCurrentImage={i === currentIndex}
+                                pagerIsDragging={isDragging}
+                                singleClickToZoom={singleClickToZoom}
+                                lazyLoad={lazyLoad}
+                                lazyLoadSrc={images[i].lazyLoadSrc ?? ""}
+                            />
+                        }
                         {renderImageOverlay()}
                     </ImageContainer>
                 </PagerInnerContentWrapper>
@@ -217,7 +218,8 @@ ImagePager.propTypes = {
             /* The source URL of this image */
             src: PropTypes.string.isRequired,
             /* The alt attribute for this image */
-            alt: PropTypes.string.isRequired
+            alt: PropTypes.string.isRequired,
+            lazyLoadSrc: PropTypes.string
         })
     ).isRequired,
     /* A React component that renders inside the image stage, useful for making overlays over the image */
@@ -227,8 +229,7 @@ ImagePager.propTypes = {
     /* Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: PropTypes.isRequired,
     /* Whether the image should be loaded only when shown */
-    lazyLoad: PropTypes.bool.isRequired,
-    lazyLoadSrc: PropTypes.string.isRequired
+    lazyLoad: PropTypes.bool.isRequired
 };
 
 export default ImagePager;

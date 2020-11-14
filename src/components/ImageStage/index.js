@@ -33,7 +33,6 @@ const ImageStage = ({
     const canPrev = currentIndex > 0;
     const canNext = currentIndex + 1 < images.length;
 
-    console.log(lazyLoadSrc);
     return (
         <ImageStageContainer className="lightbox-image-stage">
             {renderPrevButton({ canPrev })}
@@ -46,7 +45,6 @@ const ImageStage = ({
                 renderImageOverlay={renderImageOverlay}
                 singleClickToZoom={singleClickToZoom}
                 lazyLoad={lazyLoad}
-                lazyLoadSrc={lazyLoadSrc}
             />
             {renderNextButton({ canNext })}
         </ImageStageContainer>
@@ -60,6 +58,7 @@ ImageStage.propTypes = {
     images: PropTypes.arrayOf(
         PropTypes.shape({
             src: PropTypes.string.isRequired,
+            lazyLoadSrc: PropTypes.string,
             caption: PropTypes.string.isRequired,
             alt: PropTypes.string.isRequired,
             width: PropTypes.number,
@@ -70,8 +69,7 @@ ImageStage.propTypes = {
     renderNextButton: PropTypes.func.isRequired,
     renderImageOverlay: PropTypes.func.isRequired,
     singleClickToZoom: PropTypes.isRequired,
-    lazyLoad: PropTypes.bool.isRequired,
-    lazyLoadSrc: PropTypes.string.isRequired
+    lazyLoad: PropTypes.bool.isRequired
 };
 
 export default ImageStage;
