@@ -98,16 +98,15 @@ class BlogImageGallery extends React.Component {
 
         return (
             <GalleryContainer>
-                
                 <StyledLightbox
-                    isOpen={true}
+                    isOpen
                     onClose={this.closeLightbox}
                     onPrev={this.gotoPrevious}
                     onNext={this.gotoNext}
                     images={images}
                     currentIndex={currentImageIndex}
                     galleryTitle={galleryTitle}
-                    lazyLoad={true}
+                    lazyLoad
                     lazyLoadSrc="https://www.pinclipart.com/picdir/big/167-1677865_facebook-button-image-facebook-small-icon-png-clipart.png"
                     singleClickToZoom
                     renderHeader={() => (

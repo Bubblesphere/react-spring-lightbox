@@ -162,6 +162,78 @@ const ImagePager = ({
      */
     useEffect(bind, [bind, currentIndex]);
 
+    const setTrueAtArrayIndex = (a, i) => {
+        const arr = [...a];
+        arr[i] = true;
+        return arr;
+    };
+
+    const createArrayOfFalse = n => [...Array(n)].map(x => false);
+
+    const [imageLoaded, setImageLoaded] = useState(
+        createArrayOfFalse(images.length)
+    );
+    const [placeholderImageLoaded, setPlaceholderImageLoaded] = useState(
+        createArrayOfFalse(images.length)
+    );
+    const [initiatedLoadingOfImage, setInitiatedLoadingOfImage] = useState(
+        createArrayOfFalse(images.length)
+    );
+    const [
+        initiatedLoadingOfPlaceholderImage,
+        setInitiatedLoadingOfPlaceholderImage
+    ] = useState(createArrayOfFalse(images.length));
+    const [hasError, setHasError] = React.useState(false);
+
+
+
+    useEffect(() => {
+        if (!initiatedLoadingOfPlaceholderImage[currentIndex]) {
+            if (images[currentIndex].lazyLoadSrc !== undefined) {
+                const img = document.createElement('img');
+
+                img.onload = () =>
+                    setPlaceholderImageLoaded(
+                        setTrueAtArrayIndex(
+                            placeholderImageLoaded,
+                            currentIndex
+                        )
+                    );
+                img.onerror = () => setHasError(true);
+
+                img.src = images[currentIndex].lazyLoadSrc;
+            }
+
+            setInitiatedLoadingOfPlaceholderImage(
+                setTrueAtArrayIndex(
+                    initiatedLoadingOfPlaceholderImage,
+                    currentIndex
+                )
+            );
+        }
+    }, [
+        currentIndex,
+        images,
+        initiatedLoadingOfPlaceholderImage,
+        placeholderImageLoaded
+    ]);
+
+    useEffect(() => {
+        if (!initiatedLoadingOfImage) {
+            const img = document.createElement('img');
+
+            img.onload = () =>
+                setImageLoaded(setTrueAtArrayIndex(imageLoaded, currentIndex));
+            img.onerror = () => setHasError(true);
+
+            img.src = images[currentIndex].src;
+
+            setInitiatedLoadingOfImage(
+                setTrueAtArrayIndex(initiatedLoadingOfImage, currentIndex)
+            );
+        }
+    }, [currentIndex, imageLoaded, images, initiatedLoadingOfImage]);
+
     return props.map(({ x, display }, i) => (
         <AnimatedImagePager
             role="presentation"
@@ -182,20 +254,38 @@ const ImagePager = ({
                             e.nativeEvent.stopImmediatePropagation();
                         }}
                     >
-                        {!(lazyLoad && !i === currentIndex) && 
-                            <Image
-                                setDisableDrag={setDisableDrag}
-                                src={images[i].src}
-                                alt={images[i].alt}
-                                pagerHeight={pagerHeight}
-                                isCurrentImage={i === currentIndex}
-                                pagerIsDragging={isDragging}
-                                singleClickToZoom={singleClickToZoom}
-                                lazyLoad={lazyLoad}
-                                lazyLoadSrc={images[i].lazyLoadSrc ?? ""}
-                            />
-                        }
-                        {renderImageOverlay()}
+                        {!lazyLoad ||
+                            (lazyLoad &&
+                                imageLoaded[i] &&
+                                i === currentIndex &&
+                                renderImageOverlay() && (
+                                    <Image
+                                        setDisableDrag={setDisableDrag}
+                                        src={images[i].src}
+                                        alt={images[i].alt}
+                                        pagerHeight={pagerHeight}
+                                        isCurrentImage={i === currentIndex}
+                                        pagerIsDragging={isDragging}
+                                        singleClickToZoom={singleClickToZoom}
+                                    />
+                                ))}
+                        {lazyLoad &&
+                            placeholderImageLoaded[i] &&
+                            i === currentIndex &&
+                            renderImageOverlay() && (
+                                <Image
+                                    setDisableDrag={setDisableDrag}
+                                    src={images[i].lazyLoadSrc}
+                                    alt={images[i].alt}
+                                    pagerHeight={pagerHeight}
+                                    isCurrentImage={i === currentIndex}
+                                    pagerIsDragging={isDragging}
+                                    singleClickToZoom={singleClickToZoom}
+                                />
+                            )}
+                        {lazyLoad && !imageLoaded[i] && i === currentIndex && (
+                            <p>Loading</p>
+                        )}
                     </ImageContainer>
                 </PagerInnerContentWrapper>
             </PagerContentWrapper>
