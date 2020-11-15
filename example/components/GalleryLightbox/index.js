@@ -109,7 +109,6 @@ class BlogImageGallery extends React.Component {
                     images={images}
                     currentIndex={currentImageIndex}
                     galleryTitle={galleryTitle}
-                    lazyLoad
                     singleClickToZoom
                     renderHeader={() => (
                         <LightboxHeader
@@ -141,11 +140,6 @@ class BlogImageGallery extends React.Component {
                             <FiHeart size="3em" />
                         </ImageOverlay>
                     )}
-                    lazyLoad={{
-                        renderOverlay: () => <LazyLoadOverlay>Loading..</LazyLoadOverlay>,
-                        fullyInitiateIndices: [currentImageIndex],
-                        partiallyInitiateIndices: [previousIndex, nextIndex]
-                    }}
                 />
             </GalleryContainer>
         );

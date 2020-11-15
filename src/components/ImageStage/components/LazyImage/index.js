@@ -46,13 +46,13 @@ const LazyImage = ({shouldFullyInitiate, shouldPartiallyInitiate, renderChildren
         if (placeholderImageLoaded) {
             return (
                 <>
-                    {renderOverlay()}
+                    {renderOverlay && renderOverlay()}
                     {renderChildren(placeholder)}
                 </>
             );
         } 
 
-        return renderOverlay();
+        return renderOverlay && renderOverlay();
     }
 
     return null;
@@ -60,10 +60,10 @@ const LazyImage = ({shouldFullyInitiate, shouldPartiallyInitiate, renderChildren
 
 LazyImage.propTypes = {
     /* Whether the image should be initiated */ 
-    shouldFullyInitiate: PropTypes.bool.isRequired,
-    shouldPartiallyInitiate: PropTypes.bool.isRequired,
+    shouldFullyInitiate: PropTypes.bool,
+    shouldPartiallyInitiate: PropTypes.bool,
     renderChildren: PropTypes.func.isRequired, 
-    renderOverlay: PropTypes.func.isRequired, 
+    renderOverlay: PropTypes.func, 
     src: PropTypes.string.isRequired,
     placeholder: PropTypes.string
 };

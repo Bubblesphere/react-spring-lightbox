@@ -71,11 +71,11 @@ ImageStage.propTypes = {
     singleClickToZoom: PropTypes.isRequired,
     lazyLoad: PropTypes.shape({
         /* The source URL of this image */
-        renderOverlay: PropTypes.func.isRequired,
+        renderOverlay: PropTypes.func,
         /* The alt attribute for this image */
-        fullyInitiateIndices: PropTypes.arrayOf(PropTypes.number).isRequired,
-        partiallyInitiateIndices: PropTypes.arrayOf(PropTypes.number).isRequired
-    }).isRequired
+        fullyInitiateIndices: PropTypes.arrayOf(PropTypes.number),
+        partiallyInitiateIndices: PropTypes.arrayOf(PropTypes.number)
+    })
 };
 
 export default ImageStage;
