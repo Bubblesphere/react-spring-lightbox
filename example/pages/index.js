@@ -8,20 +8,16 @@ export default () => (
             imageMasonryDirection="column"
             images={[
                 {
-                    src:
-                        'https://timellenberger.com/static/blog-content/dark-mode/macos-dark-mode.png',
-
+                    src: 'https://cat-browser.azureedge.net/lghq/xplMlG1PT.jpg',
+                    placeholder: 'https://cat-browser.azureedge.net/lglq/xplMlG1PT.jpg',
                     caption: 'macOS Mojave Dark Mode Setting',
                     alt: 'macOS Mojave Dark Mode Setting',
                     width: 1200,
                     height: 1218
                 },
                 {
-                    src:
-                        'https://m.media-amazon.com/images/G/01/digital/music/merch/2019/LandingPages/katana/subtest/Katana_Aquisition_Desktop_1_1x.jpg',
-
-                    placeholder:
-                        'https://img.icons8.com/pastel-glyph/2x/search--v2.png',
+                    src: 'https://cat-browser.azureedge.net/lghq/laq3GvUgh.jpg',
+                    placeholder: 'https://cat-browser.azureedge.net/lglq/laq3GvUgh.jpg',
 
                     caption: 'Windows 10 Dark Mode Setting',
                     alt: 'Windows 10 Dark Mode Setting',
@@ -30,26 +26,24 @@ export default () => (
                 },
 
                 {
-                    src:
-                        'https://timellenberger.com/static/blog-content/dark-mode/android-9-dark-mode.jpg',
-                    placeholder:
-                        'https://www.clker.com/cliparts/3/m/v/Y/E/V/small-red-apple-hi.png',
+                    src: 'https://cat-browser.azureedge.net/lghq/yPmEpKmnR.jpg',
+                    placeholder: 'https://cat-browser.azureedge.net/lglq/yPmEpKmnR.jpg',
                     caption: 'Android 9.0 Dark Mode Setting',
                     alt: 'Android 9.0 Dark Mode Setting',
                     width: 1280,
                     height: 600
                 },
                 {
-                    src:
-                        'https://timellenberger.com/static/blog-content/dark-mode/win10-dark-mode.jpg',
+                    src:'https://cat-browser.azureedge.net/lghq/7isAO4Cav.jpg',
+                    placeholder: 'https://cat-browser.azureedge.net/lglq/7isAO4Cav.jpg',
                     caption: 'Windows 10 Dark Mode Setting#',
                     alt: 'Windows 10 Dark Mode Setting#',
                     width: 2848,
                     height: 2035
                 },
                 {
-                    src:
-                        'https://timellenberger.com/static/blog-content/dark-mode/win10-dark-mode.jpg',
+                    src: 'https://cat-browser.azureedge.net/lghq/xnzzM6MBI.jpg',
+                    placeholder: 'https://cat-browser.azureedge.net/lglq/xnzzM6MBI.jpg',
                     caption: 'Windows 10 Dark Mode Setting',
                     alt: 'Windows 10 Dark Mode Setting',
                     width: 2848,

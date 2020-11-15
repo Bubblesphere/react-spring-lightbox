@@ -43,7 +43,6 @@ const ImageStage = ({
                 onNext={onNext}
                 onPrev={onPrev}
                 renderImageOverlay={renderImageOverlay}
-                renderLazyLoadOverlay={renderLazyLoadOverlay}
                 singleClickToZoom={singleClickToZoom}
                 lazyLoad={lazyLoad}
             />
@@ -70,8 +69,13 @@ ImageStage.propTypes = {
     renderNextButton: PropTypes.func.isRequired,
     renderImageOverlay: PropTypes.func.isRequired,
     singleClickToZoom: PropTypes.isRequired,
-    lazyLoad: PropTypes.bool.isRequired,
-    renderLazyLoadOverlay: PropTypes.func.isRequired
+    lazyLoad: PropTypes.shape({
+        /* The source URL of this image */
+        renderOverlay: PropTypes.func.isRequired,
+        /* The alt attribute for this image */
+        fullyInitiateIndices: PropTypes.arrayOf(PropTypes.number).isRequired,
+        partiallyInitiateIndices: PropTypes.arrayOf(PropTypes.number).isRequired
+    }).isRequired
 };
 
 export default ImageStage;

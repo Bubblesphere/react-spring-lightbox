@@ -96,6 +96,9 @@ class BlogImageGallery extends React.Component {
         const { currentImageIndex, lightboxIsOpen, clientSide } = this.state;
         const { images, galleryTitle, imageMasonryDirection } = this.props;
 
+        const previousIndex = currentImageIndex === 0 ? null : currentImageIndex - 1;
+        const nextIndex = currentImageIndex === images.length - 1 ? null : currentImageIndex + 1;
+        
         return (
             <GalleryContainer>
                 <StyledLightbox
@@ -138,7 +141,11 @@ class BlogImageGallery extends React.Component {
                             <FiHeart size="3em" />
                         </ImageOverlay>
                     )}
-                    renderLazyLoadOverlay={() => <LazyLoadOverlay>Loading..</LazyLoadOverlay>}
+                    lazyLoad={{
+                        renderOverlay: () => <LazyLoadOverlay>Loading..</LazyLoadOverlay>,
+                        fullyInitiateIndices: [currentImageIndex],
+                        partiallyInitiateIndices: [previousIndex, nextIndex]
+                    }}
                 />
             </GalleryContainer>
         );

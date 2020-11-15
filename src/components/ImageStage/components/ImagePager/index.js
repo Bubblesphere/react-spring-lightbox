@@ -181,8 +181,7 @@ const ImagePager = ({
         )
     }
 
-    const previousIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
-    const nextIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+    console.log(lazyLoad.partiallyInitiateIndices);
 
     return props.map(({ x, display }, i) => (
         <AnimatedImagePager
@@ -206,10 +205,11 @@ const ImagePager = ({
                     >
                         {lazyLoad ?
                             <LazyImage
-                                shouldInitiate={i === previousIndex  || i === currentIndex || i === nextIndex}
+                                shouldFullyInitiate={lazyLoad.fullyInitiateIndices && lazyLoad.fullyInitiateIndices.indexOf(i) !== -1}
+                                shouldPartiallyInitiate={lazyLoad.partiallyInitiateIndices && lazyLoad.partiallyInitiateIndices.indexOf(i) !== -1}
                                 src={images[i].src}
                                 placeholder={images[i].placeholder}
-                                renderPlaceholder={renderLazyLoadOverlay}
+                                renderOverlay={lazyLoad.renderOverlay}
                                 renderChildren={(src) => getImage(i,src)}
                             /> : 
                             getImage(i, images[i].src)
@@ -247,8 +247,13 @@ ImagePager.propTypes = {
     /* Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: PropTypes.isRequired,
     /* Whether the image should be loaded only when shown */
-    lazyLoad: PropTypes.bool.isRequired,
-    renderLazyLoadOverlay: PropTypes.func.isRequired
+    lazyLoad: PropTypes.shape({
+        /* The source URL of this image */
+        renderOverlay: PropTypes.func.isRequired,
+        /* The alt attribute for this image */
+        fullyInitiateIndices: PropTypes.arrayOf(PropTypes.number).isRequired,
+        partiallyInitiateIndices: PropTypes.arrayOf(PropTypes.number).isRequired
+    }).isRequired
 };
 
 export default ImagePager;
