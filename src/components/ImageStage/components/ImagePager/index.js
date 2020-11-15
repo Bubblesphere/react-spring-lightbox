@@ -6,6 +6,7 @@ import { useGesture } from 'react-use-gesture';
 import styled from 'styled-components';
 import { useWindowSize } from '../../utils';
 import Image from '../Image';
+import LazyImage from '../LazyImage';
 
 /**
  * Gesture controlled surface that animates prev/next page changes via spring physics.
@@ -28,6 +29,7 @@ const ImagePager = ({
     onNext,
     onClose,
     renderImageOverlay,
+    renderLazyLoadOverlay,
     singleClickToZoom,
     lazyLoad
 }) => {
@@ -162,77 +164,25 @@ const ImagePager = ({
      */
     useEffect(bind, [bind, currentIndex]);
 
-    const setTrueAtArrayIndex = (a, i) => {
-        const arr = [...a];
-        arr[i] = true;
-        return arr;
-    };
+    const getImage = (i, src) => {
+        return (
+            <>
+                <Image
+                    setDisableDrag={setDisableDrag}
+                    src={src}
+                    alt={images[i].alt}
+                    pagerHeight={pagerHeight}
+                    isCurrentImage={i === currentIndex}
+                    pagerIsDragging={isDragging}
+                    singleClickToZoom={singleClickToZoom}
+                />
+                {renderImageOverlay()}
+            </>
+        )
+    }
 
-    const createArrayOfFalse = n => [...Array(n)].map(x => false);
-
-    const [imageLoaded, setImageLoaded] = useState(
-        createArrayOfFalse(images.length)
-    );
-    const [placeholderImageLoaded, setPlaceholderImageLoaded] = useState(
-        createArrayOfFalse(images.length)
-    );
-    const [initiatedLoadingOfImage, setInitiatedLoadingOfImage] = useState(
-        createArrayOfFalse(images.length)
-    );
-    const [
-        initiatedLoadingOfPlaceholderImage,
-        setInitiatedLoadingOfPlaceholderImage
-    ] = useState(createArrayOfFalse(images.length));
-    const [hasError, setHasError] = React.useState(false);
-
-
-
-    useEffect(() => {
-        if (!initiatedLoadingOfPlaceholderImage[currentIndex]) {
-            if (images[currentIndex].lazyLoadSrc !== undefined) {
-                const img = document.createElement('img');
-
-                img.onload = () =>
-                    setPlaceholderImageLoaded(
-                        setTrueAtArrayIndex(
-                            placeholderImageLoaded,
-                            currentIndex
-                        )
-                    );
-                img.onerror = () => setHasError(true);
-
-                img.src = images[currentIndex].lazyLoadSrc;
-            }
-
-            setInitiatedLoadingOfPlaceholderImage(
-                setTrueAtArrayIndex(
-                    initiatedLoadingOfPlaceholderImage,
-                    currentIndex
-                )
-            );
-        }
-    }, [
-        currentIndex,
-        images,
-        initiatedLoadingOfPlaceholderImage,
-        placeholderImageLoaded
-    ]);
-
-    useEffect(() => {
-        if (!initiatedLoadingOfImage) {
-            const img = document.createElement('img');
-
-            img.onload = () =>
-                setImageLoaded(setTrueAtArrayIndex(imageLoaded, currentIndex));
-            img.onerror = () => setHasError(true);
-
-            img.src = images[currentIndex].src;
-
-            setInitiatedLoadingOfImage(
-                setTrueAtArrayIndex(initiatedLoadingOfImage, currentIndex)
-            );
-        }
-    }, [currentIndex, imageLoaded, images, initiatedLoadingOfImage]);
+    const previousIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+    const nextIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
 
     return props.map(({ x, display }, i) => (
         <AnimatedImagePager
@@ -254,38 +204,16 @@ const ImagePager = ({
                             e.nativeEvent.stopImmediatePropagation();
                         }}
                     >
-                        {!lazyLoad ||
-                            (lazyLoad &&
-                                imageLoaded[i] &&
-                                i === currentIndex &&
-                                renderImageOverlay() && (
-                                    <Image
-                                        setDisableDrag={setDisableDrag}
-                                        src={images[i].src}
-                                        alt={images[i].alt}
-                                        pagerHeight={pagerHeight}
-                                        isCurrentImage={i === currentIndex}
-                                        pagerIsDragging={isDragging}
-                                        singleClickToZoom={singleClickToZoom}
-                                    />
-                                ))}
-                        {lazyLoad &&
-                            placeholderImageLoaded[i] &&
-                            i === currentIndex &&
-                            renderImageOverlay() && (
-                                <Image
-                                    setDisableDrag={setDisableDrag}
-                                    src={images[i].lazyLoadSrc}
-                                    alt={images[i].alt}
-                                    pagerHeight={pagerHeight}
-                                    isCurrentImage={i === currentIndex}
-                                    pagerIsDragging={isDragging}
-                                    singleClickToZoom={singleClickToZoom}
-                                />
-                            )}
-                        {lazyLoad && !imageLoaded[i] && i === currentIndex && (
-                            <p>Loading</p>
-                        )}
+                        {lazyLoad ?
+                            <LazyImage
+                                shouldInitiate={i === previousIndex  || i === currentIndex || i === nextIndex}
+                                src={images[i].src}
+                                placeholder={images[i].placeholder}
+                                renderPlaceholder={renderLazyLoadOverlay}
+                                renderChildren={(src) => getImage(i,src)}
+                            /> : 
+                            getImage(i, images[i].src)
+                        }
                     </ImageContainer>
                 </PagerInnerContentWrapper>
             </PagerContentWrapper>
@@ -309,7 +237,7 @@ ImagePager.propTypes = {
             src: PropTypes.string.isRequired,
             /* The alt attribute for this image */
             alt: PropTypes.string.isRequired,
-            lazyLoadSrc: PropTypes.string
+            placeholder: PropTypes.string
         })
     ).isRequired,
     /* A React component that renders inside the image stage, useful for making overlays over the image */
@@ -319,7 +247,8 @@ ImagePager.propTypes = {
     /* Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: PropTypes.isRequired,
     /* Whether the image should be loaded only when shown */
-    lazyLoad: PropTypes.bool.isRequired
+    lazyLoad: PropTypes.bool.isRequired,
+    renderLazyLoadOverlay: PropTypes.func.isRequired
 };
 
 export default ImagePager;

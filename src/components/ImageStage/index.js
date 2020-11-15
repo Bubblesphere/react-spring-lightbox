@@ -27,7 +27,7 @@ const ImageStage = ({
     renderImageOverlay,
     singleClickToZoom,
     lazyLoad,
-    lazyLoadSrc
+    renderLazyLoadOverlay
 }) => {
     // Extra sanity check that the next/prev image exists before moving to it
     const canPrev = currentIndex > 0;
@@ -43,6 +43,7 @@ const ImageStage = ({
                 onNext={onNext}
                 onPrev={onPrev}
                 renderImageOverlay={renderImageOverlay}
+                renderLazyLoadOverlay={renderLazyLoadOverlay}
                 singleClickToZoom={singleClickToZoom}
                 lazyLoad={lazyLoad}
             />
@@ -58,7 +59,7 @@ ImageStage.propTypes = {
     images: PropTypes.arrayOf(
         PropTypes.shape({
             src: PropTypes.string.isRequired,
-            lazyLoadSrc: PropTypes.string,
+            placeholder: PropTypes.string,
             caption: PropTypes.string.isRequired,
             alt: PropTypes.string.isRequired,
             width: PropTypes.number,
@@ -69,7 +70,8 @@ ImageStage.propTypes = {
     renderNextButton: PropTypes.func.isRequired,
     renderImageOverlay: PropTypes.func.isRequired,
     singleClickToZoom: PropTypes.isRequired,
-    lazyLoad: PropTypes.bool.isRequired
+    lazyLoad: PropTypes.bool.isRequired,
+    renderLazyLoadOverlay: PropTypes.func.isRequired
 };
 
 export default ImageStage;

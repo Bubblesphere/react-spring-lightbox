@@ -107,7 +107,6 @@ class BlogImageGallery extends React.Component {
                     currentIndex={currentImageIndex}
                     galleryTitle={galleryTitle}
                     lazyLoad
-                    lazyLoadSrc="https://www.pinclipart.com/picdir/big/167-1677865_facebook-button-image-facebook-small-icon-png-clipart.png"
                     singleClickToZoom
                     renderHeader={() => (
                         <LightboxHeader
@@ -139,6 +138,7 @@ class BlogImageGallery extends React.Component {
                             <FiHeart size="3em" />
                         </ImageOverlay>
                     )}
+                    renderLazyLoadOverlay={() => <LazyLoadOverlay>Loading..</LazyLoadOverlay>}
                 />
             </GalleryContainer>
         );
@@ -193,4 +193,14 @@ const ImageOverlay = styled.div`
             cursor: pointer;
         }
     }
+`;
+
+const LazyLoadOverlay = styled.p`
+    position: absolute;
+    text-align: center;
+    color: white;
+    z-index: 500;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `;

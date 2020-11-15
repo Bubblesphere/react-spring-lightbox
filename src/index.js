@@ -40,7 +40,8 @@ const Lightbox = ({
     singleClickToZoom,
     style,
     pageTransitionConfig,
-    lazyLoad
+    lazyLoad,
+    renderLazyLoadOverlay
 }) => {
     // Handle event listeners for keyboard
     useEffect(() => {
@@ -112,6 +113,7 @@ const Lightbox = ({
                     renderImageOverlay={renderImageOverlay}
                     singleClickToZoom={singleClickToZoom}
                     lazyLoad={lazyLoad}
+                    renderLazyLoadOverlay={renderLazyLoadOverlay}
                 />
                 {renderFooter()}
             </PageContainer>
@@ -128,7 +130,7 @@ Lightbox.propTypes = {
     images: PropTypes.arrayOf(
         PropTypes.shape({
             src: PropTypes.string.isRequired,
-            lazyLoadSrc: PropTypes.string,
+            placeholder: PropTypes.string,
             caption: PropTypes.string.isRequired,
             alt: PropTypes.string.isRequired,
             width: PropTypes.number,
@@ -144,7 +146,8 @@ Lightbox.propTypes = {
     pageTransitionConfig: PropTypes.object,
     renderImageOverlay: PropTypes.func,
     singleClickToZoom: PropTypes.bool,
-    lazyLoad: PropTypes.bool
+    lazyLoad: PropTypes.bool,
+    renderLazyLoadOverlay: PropTypes.func
 };
 
 Lightbox.defaultProps = {
@@ -156,6 +159,7 @@ Lightbox.defaultProps = {
     renderPrevButton: () => null,
     renderNextButton: () => null,
     renderImageOverlay: () => null,
+    renderLazyLoadOverlay: () => null,
     singleClickToZoom: false,
     lazyLoad: false
 };

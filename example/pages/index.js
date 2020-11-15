@@ -20,7 +20,7 @@ export default () => (
                     src:
                         'https://m.media-amazon.com/images/G/01/digital/music/merch/2019/LandingPages/katana/subtest/Katana_Aquisition_Desktop_1_1x.jpg',
 
-                    lazyLoadSrc:
+                    placeholder:
                         'https://img.icons8.com/pastel-glyph/2x/search--v2.png',
 
                     caption: 'Windows 10 Dark Mode Setting',
@@ -32,7 +32,7 @@ export default () => (
                 {
                     src:
                         'https://timellenberger.com/static/blog-content/dark-mode/android-9-dark-mode.jpg',
-                    lazyLoadSrc:
+                    placeholder:
                         'https://www.clker.com/cliparts/3/m/v/Y/E/V/small-red-apple-hi.png',
                     caption: 'Android 9.0 Dark Mode Setting',
                     alt: 'Android 9.0 Dark Mode Setting',
